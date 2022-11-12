@@ -60,7 +60,10 @@ class Parser:
 
     def _parse_range_str(self, range_str):
         try:
-            start, count = [abs(int(p)) for p in range_str.split(',')]
+            parts = range_str.split(',')
+            if len(parts) == 1:
+                parts.append('1')
+            start, count = [abs(int(p)) for p in parts]
             return list(range(start, start+count)) 
         except:
             return []
