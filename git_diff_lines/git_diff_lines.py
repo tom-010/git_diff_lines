@@ -11,7 +11,7 @@ def list_changed_lines_in_last_commit(path_to_repo='.'):
     return git_diff_lines(compared_to='HEAD~1', path_to_repo=path_to_repo)
 
 
-def git_diff_lines(compared_to='HEAD', path_to_repo='.'):
+def git_diff_lines(compared_to='HEAD', path_to_repo='.', diff=None):
     """"
     Returns a list of tuples of changed lines in a diff in the 
     form (filename, line_number) with the type tuple(str, int).
@@ -22,11 +22,14 @@ def git_diff_lines(compared_to='HEAD', path_to_repo='.'):
     path_to_repo is the (relative or absolute) path, to the directory, 
                  that contains the .git folder
     """
-    stdout, stderr, has_error = _run(f'git diff {compared_to}', cwd=path_to_repo)
-    if has_error:
-        print(stderr)
-        return set()
-    return parse(stdout)
+    if diff:
+        return parse(diff)
+    else:
+        stdout, stderr, has_error = _run(f'git diff {compared_to}', cwd=path_to_repo)
+        if has_error:
+            print(stderr)
+            return set()
+        return parse(stdout)
 
 
 
